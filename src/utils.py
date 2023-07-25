@@ -8,6 +8,9 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from src.exeption import CustomException
 from src.logger import logging
 
+from sklearn.model_selection import GridSearchCV
+
+
 def save_object(file_path, obj):
     try:
         dir_path = os.path.dirname(file_path)
@@ -51,6 +54,45 @@ def evaluate_model(X_train,y_train,X_test,y_test,models):
     except Exception as e:
         logging.error('Exception occured during model training')
         raise CustomException(e,sys)
+
+def enhance_model(X_train,y_train,X_test,y_test,models, params):
+    try:
+        report = {'Model_Name':[], 'Model': [], 'R2_Score': []}
+
+        model = list(models.values())[0]
+        # model_name = list(models.keys())[i]
+
+        logging.info(f'Enhancing {model}')
+
+        grid_search=GridSearchCV(estimator=model,param_grid=params,cv=5, verbose=10)
+        grid_search.fit(X_train,y_train)
+
+        logging.info(f'Best Estimator: {grid_search.best_estimator_}')
+        logging.info(f'Best Param: {grid_search.best_params_}')
+
+        model.set_params(**grid_search.best_params_)
+
+        # Train model
+        model.fit(X_train,y_train)
+
+        # Predict Testing data
+        y_test_pred =model.predict(X_test)
+
+        # Get R2 scores for train and test data
+        #train_model_score = r2_score(ytrain,y_train_pred)
+        test_model_score = r2_score(y_test,y_test_pred)
+        logging.info(f'R2_Score: {test_model_score}')
+
+        report['Model_Name'].append(list(models.keys())[0])
+        report['Model'].append(model)
+        report['R2_Score'].append(test_model_score*100)
+
+        return report
+
+    except Exception as e:
+        logging.error('Exception occured during model training')
+        raise CustomException(e,sys)
+
     
 def load_object(file_path):
     try:
