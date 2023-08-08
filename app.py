@@ -38,6 +38,7 @@ def predict_datapoint():
         results=round(pred[0],2)
 
         return render_template('results.html',final_result=results)
+        # return jsonify({"final_result": float(results)})
 
 
 
