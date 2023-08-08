@@ -1,8 +1,0 @@
-[ 2023-08-01 00:42:47,464 ] Line No. 187 werkzeug - WARNING -  * Debugger is active!
-[ 2023-08-01 00:42:47,488 ] Line No. 187 werkzeug - INFO -  * Debugger PIN: 670-130-762
-[ 2023-08-01 07:38:40,025 ] Line No. 187 werkzeug - INFO - 127.0.0.1 - - [01/Aug/2023 07:38:40] "GET / HTTP/1.1" 200 -
-[ 2023-08-01 07:38:41,588 ] Line No. 187 werkzeug - INFO - 127.0.0.1 - - [01/Aug/2023 07:38:41] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-[ 2023-08-01 07:38:48,212 ] Line No. 187 werkzeug - INFO - 127.0.0.1 - - [01/Aug/2023 07:38:48] "GET /predict HTTP/1.1" 200 -
-[ 2023-08-01 07:38:58,738 ] Line No. 75 root - INFO - Dataframe Gathered
-[ 2023-08-01 07:39:05,783 ] Line No. 187 werkzeug - INFO - 127.0.0.1 - - [01/Aug/2023 07:39:05] "POST /predict HTTP/1.1" 200 -
-[ 2023-08-01 07:39:12,400 ] Line No. 187 werkzeug - INFO - 127.0.0.1 - - [01/Aug/2023 07:39:12] "GET /predict HTTP/1.1" 200 -
