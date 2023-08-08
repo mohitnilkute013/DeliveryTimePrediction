@@ -3,4 +3,5 @@ numpy
 Flask
 scikit-learn
 seaborn
+mlflow
 -e .

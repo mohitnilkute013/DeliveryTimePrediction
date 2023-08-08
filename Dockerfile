@@ -1,7 +1,9 @@
-FROM python:3.8-alpine
-COPY . /app
+FROM python:3.8-slim-buster
+
+RUN apt update -y && apt install awscli -y
 WORKDIR /app
-# RUN apk update
-# RUN apk add make automake gcc g++ subversion python3-dev
-RUN pip install --upgrade pip && pip install -r requirements.txt
-CMD python app.py
+
+COPY . /app
+RUN pip install -r requirements.txt
+
+CMD ["python3", "app.py"]
