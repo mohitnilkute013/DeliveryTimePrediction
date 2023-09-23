@@ -7,16 +7,28 @@ application=Flask(__name__)
 app=application
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home_page():
-    return render_template('index.html')
 
-@app.route('/predict',methods=['GET','POST'])
+    title = 'Delivery Time Prediction App'
 
-def predict_datapoint():
+    parameters = {
+            'Delivery_person_Age': 'text',
+            'Delivery_person_Ratings': 'text',
+            'Vehicle_condition': 'text',
+            'multiple_deliveries': 'text',
+            'Pickup_Duration': 'text',
+            'Distance': 'text',
+            'Weather_conditions': ['Fog', 'Stormy', 'Sandstorms', 'Windy', 'Cloudy', 'Sunny'],
+            'Road_traffic_density': ['Jam', 'High', 'Medium', 'Low'],
+            'Type_of_vehicle': ['motorcycle', 'scooter', 'electric_scooter', 'bicycle'],
+            'Festival': ['No', 'Yes'],
+            'City': ['Metropolitian', 'Urban', 'Semi-Urban']
+            # Add more parameters as needed
+        }
+
     if request.method=='GET':
-        return render_template('form.html')
-    
+        return render_template('index.html', title=title, parameters=parameters)
     else:
         data=CustomData(
             Delivery_person_Age=float(request.form.get('Delivery_person_Age')),
@@ -35,11 +47,9 @@ def predict_datapoint():
         predict_pipeline=PredictPipeline()
         pred=predict_pipeline.predict(final_new_data)
 
-        results=round(pred[0],2)
+        results = f"The predicted result is: {round(pred[0], 2)}"
 
-        return render_template('results.html',final_result=results)
-        # return jsonify({"final_result": float(results)})
-
+        return render_template('index.html', title=title, parameters=parameters, final_result=results)
 
 
 if __name__=="__main__":

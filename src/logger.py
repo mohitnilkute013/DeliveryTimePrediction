@@ -1,24 +1,30 @@
-import logging 
+import logging
 import os
 from datetime import datetime
 
-LOG_FILE=f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log"
-logs_path=os.path.join(os.getcwd(),"logs",LOG_FILE)
+LOG_FILE_NAME = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_S')}.log"
+logs_path = os.path.join(os.getcwd(),'logs')
 os.makedirs(logs_path,exist_ok=True)
+LOG_FILE_PATH = os.path.join(logs_path, LOG_FILE_NAME)
 
-LOG_FILE_PATH=os.path.join(logs_path,LOG_FILE)
 
 logging.basicConfig(
-    filename=LOG_FILE_PATH,
-    format="[ %(asctime)s ] Line No. %(lineno)d %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+    # filename=LOG_FILE_PATH,
+    format="[%(asctime)s] Line No. %(lineno)d %(name)s - %(levelname)s - %(message)s",
+    level = logging.INFO
 )
 
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
+# Create a file handler
+file_handler = logging.FileHandler(LOG_FILE_PATH)
+file_handler.setLevel(logging.INFO)  # Set the desired log level
+file_handler.setFormatter(logging.Formatter('[%(asctime)s] Line No. %(lineno)d %(name)s - %(levelname)s - %(message)s'))
 
-# f = logging.Formatter('[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s')
-# file_handler = logging.FileHandler(LOG_FILE_PATH)
+# Create a stream handler (console output)
+# stream_handler = logging.StreamHandler()
+# stream_handler.setLevel(logging.INFO)  # Set the desired log level
+# stream_handler.setFormatter(logging.Formatter('[%(asctime)s] Line No. %(lineno)d %(name)s - %(levelname)s - %(message)s'))
 
-# file_handler.setFormatter(f)
-# logger.addHandler(file_handler)
+# Get the root logger and add handlers
+logger = logging.getLogger()
+logger.addHandler(file_handler)
+# logger.addHandler(stream_handler)

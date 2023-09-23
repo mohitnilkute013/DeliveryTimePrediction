@@ -1,7 +1,7 @@
 import sys
 import os
 from src.exeption import CustomException
-from src.logger import logging
+from src.logger import logger
 from src.utils import load_object
 import pandas as pd
 
@@ -19,13 +19,16 @@ class PredictPipeline:
             model=load_object(model_path)
 
             data_scaled=preprocessor.transform(features)
+            logger.info("Preprocessing Done.")
 
             pred=model.predict(data_scaled)
+            logger.info("Prediction Completed.")
+
             return pred
             
 
         except Exception as e:
-            logging.info("Exception occured in prediction")
+            logger.error("Exception occured in prediction")
             raise CustomException(e,sys)
         
 class CustomData:
@@ -72,8 +75,33 @@ class CustomData:
                 'Distance':[self.Distance]
             }
             df = pd.DataFrame(custom_data_input_dict)
-            logging.info('Dataframe Gathered')
+            logger.info('Dataframe Gathered')
             return df
         except Exception as e:
-            logging.info('Exception Occured in prediction pipeline')
+            logger.error('Exception Occured in prediction pipeline')
             raise CustomException(e,sys)
+
+
+if __name__ == "__main__":
+    #logger.info('Prediction Pipeline Started')
+    cd = CustomData(Delivery_person_Age = 25,
+                 Delivery_person_Ratings=5.2,
+                 Weather_conditions="Fog",
+                 Road_traffic_density="Jam",
+                 Vehicle_condition="2",
+                 Type_of_vehicle="scooter",
+                 multiple_deliveries= 3.0,
+                 Festival="No",
+                 City="Metropolitian",
+                 Pickup_Duration=15,
+                 Distance=10)
+
+    cd_df = cd.get_data_as_dataframe()
+    print(cd_df)
+
+    predict_pipeline = PredictPipeline()
+    pred = predict_pipeline.predict(cd_df)
+
+    results = round(pred[0], 2)
+
+    print(results)

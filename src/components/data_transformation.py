@@ -9,7 +9,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder,StandardScaler
 
 from src.exeption import CustomException
-from src.logger import logging
+from src.logger import logger
 import os
 from src.utils import save_object
 
@@ -23,7 +23,7 @@ class DataTransformation:
 
     def get_data_transformation_object(self):
         try:
-            logging.info('Data Transformation initiated')
+            logger.info('Data Transformation initiated')
             # Define which columns should be ordinal-encoded and which should be scaled
             categorical_cols = ['Weather_conditions', 'Road_traffic_density', 'Type_of_vehicle', 'Festival', 'City']
             numerical_cols = ['Delivery_person_Age', 'Delivery_person_Ratings', 'Vehicle_condition',
@@ -40,7 +40,7 @@ class DataTransformation:
             City_cat = ['Metropolitian', 'Urban', 'Semi-Urban']
             City_cat.reverse()
             
-            logging.info('Pipeline Initiated')
+            logger.info('Pipeline Initiated')
 
             ## Numerical Pipeline
             num_pipeline=Pipeline(
@@ -67,12 +67,12 @@ class DataTransformation:
             ('cat_pipeline',cat_pipeline,categorical_cols)
             ])
             
-            logging.info('Pipeline Completed')
+            logger.info('Pipeline Completed')
 
             return preprocessor
 
         except Exception as e:
-            logging.error("Error in Preparing Data Transformation Object")
+            logger.error("Error in Preparing Data Transformation Object")
             raise CustomException(e,sys)
         
     def initiate_data_transformation(self,train_path,test_path):
@@ -81,11 +81,11 @@ class DataTransformation:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
 
-            logging.info('Read train and test data completed')
-            logging.info(f'Train Dataframe Head : \n{train_df.head().to_string()}')
-            logging.info(f'Test Dataframe Head  : \n{test_df.head().to_string()}')
+            logger.info('Read train and test data completed')
+            logger.info(f'Train Dataframe Head : \n{train_df.head().to_string()}')
+            logger.info(f'Test Dataframe Head  : \n{test_df.head().to_string()}')
 
-            logging.info('Obtaining preprocessing object')
+            logger.info('Obtaining preprocessing object')
 
             preprocessing_obj = self.get_data_transformation_object()
 
@@ -106,7 +106,7 @@ class DataTransformation:
             input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
 
-            logging.info("Applying preprocessing object on training and testing datasets.")
+            logger.info("Applying preprocessing object on training and testing datasets.")
             
             #concatenates side by side
             train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
@@ -118,7 +118,7 @@ class DataTransformation:
                 obj=preprocessing_obj
 
             )
-            logging.info('Preprocessor pickle file saved')
+            logger.info('Preprocessor pickle file saved')
 
             return (
                 train_arr,
@@ -127,6 +127,6 @@ class DataTransformation:
             )
             
         except Exception as e:
-            logging.error("Exception occured in the initiate_datatransformation")
+            logger.error("Exception occured in the initiate_datatransformation")
 
             raise CustomException(e,sys)

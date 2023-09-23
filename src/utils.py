@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
 from src.exeption import CustomException
-from src.logger import logging
+from src.logger import logger
 
 from sklearn.model_selection import GridSearchCV
 
@@ -21,7 +21,7 @@ def save_object(file_path, obj):
             pickle.dump(obj, file_obj)
 
     except Exception as e:
-        logging.error('Exception occured during model saving...')
+        logger.error('Exception occured during model saving...')
         raise CustomException(e, sys)
     
 def evaluate_model(X_train,y_train,X_test,y_test,models):
@@ -32,7 +32,7 @@ def evaluate_model(X_train,y_train,X_test,y_test,models):
             model = list(models.values())[i]
             # model_name = list(models.keys())[i]
 
-            logging.info(f'Training on {model}')
+            logger.info(f'Training on {model}')
 
             # Train model
             model.fit(X_train,y_train)
@@ -43,7 +43,7 @@ def evaluate_model(X_train,y_train,X_test,y_test,models):
             # Get R2 scores for train and test data
             #train_model_score = r2_score(ytrain,y_train_pred)
             test_model_score = r2_score(y_test,y_test_pred)
-            logging.info(f'R2_Score: {test_model_score}')
+            logger.info(f'R2_Score: {test_model_score}')
 
             report['Model_Name'].append(list(models.keys())[i])
             report['Model'].append(model)
@@ -52,7 +52,7 @@ def evaluate_model(X_train,y_train,X_test,y_test,models):
         return report
 
     except Exception as e:
-        logging.error('Exception occured during model training')
+        logger.error('Exception occured during model training')
         raise CustomException(e,sys)
 
 def enhance_model(X_train,y_train,X_test,y_test,models, params):
@@ -62,13 +62,13 @@ def enhance_model(X_train,y_train,X_test,y_test,models, params):
         model = list(models.values())[0]
         # model_name = list(models.keys())[i]
 
-        logging.info(f'Enhancing {model}')
+        logger.info(f'Enhancing {model}')
 
         grid_search=GridSearchCV(estimator=model,param_grid=params,cv=5, verbose=10)
         grid_search.fit(X_train,y_train)
 
-        logging.info(f'Best Estimator: {grid_search.best_estimator_}')
-        logging.info(f'Best Param: {grid_search.best_params_}')
+        logger.info(f'Best Estimator: {grid_search.best_estimator_}')
+        logger.info(f'Best Param: {grid_search.best_params_}')
 
         model.set_params(**grid_search.best_params_)
 
@@ -81,7 +81,7 @@ def enhance_model(X_train,y_train,X_test,y_test,models, params):
         # Get R2 scores for train and test data
         #train_model_score = r2_score(ytrain,y_train_pred)
         test_model_score = r2_score(y_test,y_test_pred)
-        logging.info(f'R2_Score: {test_model_score}')
+        logger.info(f'R2_Score: {test_model_score}')
 
         report['Model_Name'].append(list(models.keys())[0])
         report['Model'].append(model)
@@ -90,7 +90,7 @@ def enhance_model(X_train,y_train,X_test,y_test,models, params):
         return report
 
     except Exception as e:
-        logging.error('Exception occured during model training')
+        logger.error('Exception occured during model training')
         raise CustomException(e,sys)
 
     
@@ -99,7 +99,7 @@ def load_object(file_path):
         with open(file_path,'rb') as file_obj:
             return pickle.load(file_obj)
     except Exception as e:
-        logging.error('Exception Occured in load_object function utils')
+        logger.error('Exception Occured in load_object function utils')
         raise CustomException(e,sys)
 
     

@@ -4,7 +4,7 @@ import sys
 import pandas as pd 
 import numpy as np 
 
-from src.logger import logging
+from src.logger import logger
 from src.exeption import CustomException
 from src.utils import save_object, load_object, evaluate_model, enhance_model
 
@@ -32,7 +32,7 @@ class EnhanceTrainer:
                 'XGB':xgb.XGBRegressor()
             }
 
-            logging.info('Splitting Dependent and Independent variables from train and test data')
+            logger.info('Splitting Dependent and Independent variables from train and test data')
             X_train, y_train, X_test, y_test = (
                 trainarr[:,:-1],
                 trainarr[:,-1],
@@ -51,7 +51,7 @@ class EnhanceTrainer:
 
             print(pd.DataFrame(model_report))
             print('\n====================================================================================\n')
-            logging.info(f'Model Report : \n{pd.DataFrame(model_report)}')
+            logger.info(f'Model Report : \n{pd.DataFrame(model_report)}')
 
             # To get best model score from dictionary 
             index = list(model_report['R2_Score']).index(max(model_report['R2_Score']))
@@ -63,17 +63,17 @@ class EnhanceTrainer:
 
             print(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')
             print('\n====================================================================================\n')
-            logging.info(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')
+            logger.info(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')
 
             save_object(
                  file_path=self._config.enhance_trainer_config_path,
                  obj=best_model
             )
 
-            logging.info('Saved Best Model file')
+            logger.info('Saved Best Model file')
 
         except Exception as e:
-            logging.error('Error in Enhance Training.')
+            logger.error('Error in Enhance Training.')
             raise CustomException(e, sys)
 
 
