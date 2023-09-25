@@ -1,3 +1,5 @@
+.gitignore
 venv/
 logs/
 DeliveryTimePrediction.egg-info/
+static/
