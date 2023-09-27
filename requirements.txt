@@ -6,4 +6,4 @@ mlflow
 xgboost
 Flask
 streamlit
--e .
+# -e .
