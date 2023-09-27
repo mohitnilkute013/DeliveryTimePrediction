@@ -1,4 +1,16 @@
-﻿# DeliveryTimePrediction
+---
+title: Delivery Time Prediction
+emoji: ⚡
+colorFrom: red
+colorTo: blue
+sdk: streamlit
+sdk_version: 1.27.0
+app_file: streamLitApp.py
+pinned: false
+license: apache-2.0
+---
+ 
+ # DeliveryTimePrediction
 
 ```
 pip install requirements.txt
