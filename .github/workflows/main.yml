@@ -17,4 +17,4 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://mohitnilkute013:$HF_TOKEN@huggingface.co/spaces/mohitnilkute013/Delivery-Time-Prediction main
+        run: git push --force https://mohitnilkute013:$HF_TOKEN@huggingface.co/spaces/mohitnilkute013/Delivery-Time-Prediction main
