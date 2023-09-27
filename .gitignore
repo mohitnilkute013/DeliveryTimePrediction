@@ -2,4 +2,8 @@
 venv/
 logs/
 DeliveryTimePrediction.egg-info/
-static/
+Project_Pics/
+templates/
+setup.py
+app.py
+Dockerfile

@@ -10,7 +10,7 @@ pinned: false
 license: apache-2.0
 ---
  
- # DeliveryTimePrediction
+# DeliveryTimePrediction
 
 ```
 pip install requirements.txt
