@@ -28,8 +28,8 @@ class PredictPipeline:
             
 
         except Exception as e:
-            logger.error("Exception occured in prediction")
-            raise CustomException(e,sys)
+            logger.error(CustomException(e,sys))
+            raise e
         
 class CustomData:
     def __init__(self,
@@ -44,60 +44,45 @@ class CustomData:
                  City:str,
                  Pickup_Duration:int,
                  Distance:int):
+
+        # Automatically set instance attributes based on constructor arguments
         
-        
-        self.Delivery_person_Age=Delivery_person_Age
-        self.Delivery_person_Ratings=Delivery_person_Ratings
-        self.Weather_conditions=Weather_conditions
-        self.Road_traffic_density = Road_traffic_density
-        self.Vehicle_condition = Vehicle_condition
-        self.Type_of_vehicle=Type_of_vehicle
-        self.multiple_deliveries=multiple_deliveries
-        self.Festival=Festival
-        self.City=City
-        self.Pickup_Duration=Pickup_Duration
-        self.Distance=Distance
-        
+        for arg_name, arg_value in locals().items():
+            if arg_name != 'self':
+                setattr(self, arg_name, arg_value)
+
+        # print(locals().items())
+        # print(self.__dict__.items())
+
 
     def get_data_as_dataframe(self):
         try:
-            custom_data_input_dict = {
-                'Delivery_person_Age':[self.Delivery_person_Age],
-                'Delivery_person_Ratings':[self.Delivery_person_Ratings],
-                'Weather_conditions':[self.Weather_conditions],
-                'Road_traffic_density':[self.Road_traffic_density],
-                'Vehicle_condition':[self.Vehicle_condition],
-                'Type_of_vehicle':[self.Type_of_vehicle],
-                'multiple_deliveries':[self.multiple_deliveries],
-                'Festival':[self.Festival],
-                'City':[self.City],
-                'Pickup_Duration':[self.Pickup_Duration],
-                'Distance':[self.Distance]
-            }
-            df = pd.DataFrame(custom_data_input_dict)
-            logger.info('Dataframe Gathered')
+            
+            df = pd.DataFrame([self.__dict__])
+            logger.info(f'Dataframe Gathered\n {df.head().to_string()}')
+            # print(self.__dict__.items())
             return df
         except Exception as e:
-            logger.error('Exception Occured in prediction pipeline')
-            raise CustomException(e,sys)
+            logger.error('Exception Occured in Custom Data Gathering.')
+            logger.error(CustomException(e,sys))
+            raise e
 
 
 if __name__ == "__main__":
     #logger.info('Prediction Pipeline Started')
     cd = CustomData(Delivery_person_Age = 25,
-                 Delivery_person_Ratings=5.2,
-                 Weather_conditions="Fog",
-                 Road_traffic_density="Jam",
-                 Vehicle_condition="2",
-                 Type_of_vehicle="scooter",
-                 multiple_deliveries= 3.0,
-                 Festival="No",
-                 City="Metropolitian",
-                 Pickup_Duration=15,
-                 Distance=10)
+                 Delivery_person_Ratings = 5.2,
+                 Weather_conditions = "Fog",
+                 Road_traffic_density = "Jam",
+                 Vehicle_condition = "2",
+                 Type_of_vehicle = "scooter",
+                 multiple_deliveries = 3.0,
+                 Festival = "No",
+                 City = "Metropolitian",
+                 Pickup_Duration = 15,
+                 Distance = 10)
 
     cd_df = cd.get_data_as_dataframe()
-    print(cd_df)
 
     predict_pipeline = PredictPipeline()
     pred = predict_pipeline.predict(cd_df)
